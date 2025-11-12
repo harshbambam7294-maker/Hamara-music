@@ -204,6 +204,58 @@ signupSubmit.addEventListener("click", () => {
     signupOverlay.classList.remove("show-modal");
 });
 
+// ✅ SEARCH FUNCTIONALITY FOR PLAYLISTS
+const searchInput = document.getElementById("playlistSearch");
+if (searchInput) {
+    searchInput.addEventListener("input", () => {
+        const filter = searchInput.value.toLowerCase();
+        const cards = document.querySelectorAll(".card");
+
+        cards.forEach(card => {
+            const title = card.querySelector("h2")?.innerText.toLowerCase() || "";
+            const desc = card.querySelector("p")?.innerText.toLowerCase() || "";
+            card.style.display = (title.includes(filter) || desc.includes(filter)) ? "block" : "none";
+        });
+    });
 }
+
+// ✅ MAKE SEARCH ICON AND TEXT TOGGLE THE SEARCH BAR VISIBILITY
+const searchButton = document.querySelector('li img[src="img/search.svg"]');
+const searchText = document.querySelector('li img[src="img/search.svg"]').parentElement; // The <li> that contains "Search"
+const searchContainer = document.querySelector(".search-container");
+const searchInputField = document.getElementById("playlistSearch");
+
+// Function to show the search bar
+function showSearchBar() {
+    if (!searchContainer.classList.contains("active")) {
+        searchContainer.classList.add("active");
+        searchInputField.focus();
+
+        // Optional: Scroll to playlists section for better UX
+        const playlistSection = document.querySelector(".spotifyPlaylists");
+        if (playlistSection) {
+            playlistSection.scrollIntoView({ behavior: "smooth" });
+        }
+    } else {
+        // If already visible, just refocus the input (don’t hide it)
+        searchInputField.focus();
+    }
+}
+
+if (searchButton && searchText && searchContainer && searchInputField) {
+    // Clicking search icon shows search bar
+    searchButton.addEventListener("click", showSearchBar);
+
+    // Clicking "Search" text also shows search bar
+    searchText.addEventListener("click", showSearchBar);
+
+    // ✅ Optional: hide search bar when user clicks outside or unfocuses
+    searchInputField.addEventListener("blur", () => {
+        setTimeout(() => searchContainer.classList.remove("active"), 200);
+    });
+}
+}
+
+
 
 main();
